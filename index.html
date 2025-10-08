@@ -39,6 +39,7 @@
             rel="stylesheet"
         />
         <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
+        <script src="./js/config.js"></script>
         <script src="./js/main.js"></script>
     </head>
     <body>
@@ -52,7 +53,6 @@
                     <li><a href="#service">services</a></li>
                     <li><a href="#portfolio">portfolio</a></li>
                     <li><a href="#team">team</a></li>
-                    <li><a href="careers.html">career</a></li>
                     <li><a href="#contact">contact</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
@@ -501,7 +501,6 @@
 
         <div class="contact-in">
             <div class="contact-form">
-                <!-- <form action="./contactme.php" method="POST"> -->
                 <form id="contact-form">
                     <input
                         type="text"
@@ -533,16 +532,10 @@
                         class="contact-form-txtarea"
                         required
                     ></textarea>
-                    <!-- <input
-                        type="submit"
-                        value="Submit"
-                        name="submit"
-                        class="contact-form-btn"
-                    /> -->
                     <button
                         type="button"
                         class="contact-form-btn"
-                        onclick="submitForm(event)"
+                        onclick="submitForm()"
                     >
                         Submit
                     </button>
@@ -689,10 +682,6 @@
                                 <li>
                                     <i class="ion-ios-arrow-forward"></i>
                                     <a href="#team">Team</a>
-                                </li>
-                                <li>
-                                    <i class="ion-ios-arrow-forward"></i>
-                                    <a href="careers.html">Career</a>
                                 </li>
                                 <li>
                                     <i class="ion-ios-arrow-forward"></i>

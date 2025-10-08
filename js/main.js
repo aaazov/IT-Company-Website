@@ -82,9 +82,7 @@ $(document).ready(function () {
     });
 });
 
-function submitForm(event) {
-    event.preventDefault();
-
+function submitForm() {
     const submitBtn = document.querySelector('.contact-form-btn');
     const responseMessage = document.getElementById('response-message');
 
@@ -99,12 +97,11 @@ function submitForm(event) {
         message: document.querySelector('[name="message"]').value,
     };
 
-    const devURL = "DEV_URL_PLACEHOLDER";
-    const execUrl = "EXEC_URL_PLACEHOLDER";
+    const devURL = CONFIG.DEV_URL;
+    const execUrl = CONFIG.EXEC_URL;
 
-    // 发送到 API
     fetch(
-        execUrl;
+        execUrl,
         {
             method: 'POST',
             body: JSON.stringify(formData),
@@ -112,13 +109,23 @@ function submitForm(event) {
     )
         .then((response) => response.json())
         .then((data) => {
-            responseMessage.textContent =
-                'Thank you! Your message has been sent.';
-            document.getElementById('contact-form').reset();
+            if (data.status === 'success') {
+                responseMessage.textContent =
+                    'Thank you! Your message has been sent.';
+                console.log('success');
+                document.getElementById('contact-form').reset();
+            } else {
+                responseMessage.textContent =
+                    'Submission Failed:  ' +
+                    (data.error || 'Please try again.');
+                console.log('response fail');
+                console.log('Response JSON:', data);
+            }
         })
         .catch((error) => {
-            responseMessage,
-                (textContent = 'Error submitting the form. Please try again.');
+            responseMessage.textContent =
+                'Error submitting the form. Please try again.';
+            console.log('catch block error:  ' + error);
         })
         .finally(() => {
             submitBtn.textContent = originalText;
