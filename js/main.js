@@ -82,15 +82,35 @@ $(document).ready(function () {
     });
 });
 
+function showToast(type, message) {
+    const toastEl = document.getElementById('global-toast');
+    const titleEl = document.getElementById('toast-title');
+    const bodyEl = document.getElementById('toast-body');
+
+    const isSuccess = type === 'success';
+    titleEl.textContent = isSuccess ? 'Success' : 'Notice';
+    bodyEl.textContent = message;
+
+    const header = toastEl.querySelector('.toast-header');
+    header.classList.remove('bg-success', 'bg-danger', 'text-white');
+    if (isSuccess) {
+        header.classList.add('bg-success', 'text-white');
+    } else {
+        header.classList.add('bg-danger', 'text-white');
+    }
+
+    $(toastEl).toast('show');
+}
+
 function submitForm(e) {
     e.preventDefault();
 
+    const form = e.target;
     if (!form.checkValidity()) {
         form.reportValidity();
         return;
     }
     const submitBtn = document.querySelector('.contact-form-btn');
-    const responseMessage = document.getElementById('response-message');
 
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Sending...';
@@ -116,30 +136,21 @@ function submitForm(e) {
         .then((response) => response.json())
         .then((data) => {
             if (data.status === 'success') {
-                responseMessage.textContent =
-                    'Thank you! Your message has been sent.';
+               showToast('success', 'Thank you! Your Message sent successfully!');
                 console.log('success');
                 document.getElementById('contact-form').reset();
             } else {
-                responseMessage.textContent =
-                    'Submission Failed:  ' +
-                    (data.error || 'Please try again.');
+                showToast('error','Submission Failed:  ' + (data.error || 'Please try again.'));
                 console.log('response fail');
                 console.log('Response JSON:', data);
             }
         })
         .catch((error) => {
-            responseMessage.textContent =
-                'Error submitting the form. Please try again.';
+            showToast('error', 'Error submitting the form. Please try again.');
             console.log('catch block error:  ' + error);
         })
         .finally(() => {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         });
-}
-
-function validateEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
 }
