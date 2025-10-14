@@ -82,7 +82,13 @@ $(document).ready(function () {
     });
 });
 
-function submitForm() {
+function submitForm(e) {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
     const submitBtn = document.querySelector('.contact-form-btn');
     const responseMessage = document.getElementById('response-message');
 
@@ -131,4 +137,9 @@ function submitForm() {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
         });
+}
+
+function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
 }

@@ -150,7 +150,7 @@ body{
 .home{
     min-height: 100vh;
     width: 100vw;
-    background-image: url(../images/img1.jpg);
+    background-image: url(../images/main-background-3.PNG);
     background-size: cover;
     display: flex;
     align-items: center;
@@ -204,8 +204,8 @@ body{
     }
 }
 
-.about{
-    min-height: 55vh;
+.vision{
+    min-height: 30vh;
     width: 100vw;
     top: -3rem;
     text-align: center;
@@ -214,7 +214,7 @@ body{
     line-height: 10rem;
 }
 
-.about .row{
+.vision .row{
     line-height: 4rem;
     display: flex;
     align-items: center;
@@ -222,16 +222,16 @@ body{
     padding: 0 4rem;
 }
 
-.about .row .content{
+.vision .row .content{
     text-align: center;
 }
 
-.about .row .content h3{
+.vision .row .content h3{
     font-size: 3rem;
     color: black;
 }
 
-.about .row .content p{
+.vision .row .content p{
     font-size: 2rem;
     color: #333;
     padding: 1rem 0;
@@ -250,6 +250,9 @@ body{
     font-size: 20px;
     line-height: 28px;
     text-align: center;
+  }
+  .pt5 .clients-carousel .img{
+      padding-top: 5rem;
   }
   .item{
     background:#fff;
@@ -328,7 +331,7 @@ body{
   }   
 
 .counters {
-	background-image: url(../images/img2.jpg);
+	background-image: url(../images/window-2.png);
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -459,7 +462,7 @@ body{
 .communicate{
     text-align: center;
     align-items: center;
-    background-image: url(../images/img3.jpg);
+    background-image: url(../images/window-2.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -645,6 +648,7 @@ body{
     border: .5rem solid #fff;
     box-shadow: 0 0 .5rem rgba(0,0,0,.3);
     object-fit: cover;
+    padding: 0;
 }
 
 .team .row .card .info h3{
