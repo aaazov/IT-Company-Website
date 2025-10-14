@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-transform: capitalize;
+    /*text-transform: capitalize;*/
     transition: all .2s linear;
     text-decoration: none;
 }
@@ -16,6 +16,9 @@ html{
 
 body{
     overflow-x: hidden;
+}
+.navbar ul li:nth-child(7) a{
+    border-bottom:1px solid white;
 }
 
 .heading, .clients .section-header h2, .section-head h1, .testimonials .section-header h2, .section-head-1 h4{
@@ -172,6 +175,14 @@ body{
     font-size: 3rem;
 }
 
+.home h2 img{
+    width: 17rem;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    display: inline-block;
+}
+
 .home .wave{
     position: absolute;
     bottom: -.5rem;
@@ -205,7 +216,7 @@ body{
 }
 
 .vision{
-    min-height: 30vh;
+    min-height: 40vh;
     width: 100vw;
     top: -3rem;
     text-align: center;
@@ -351,7 +362,7 @@ body{
 
 	.counters .container > div:nth-of-type(1),
 	.counters .container > div:nth-of-type(2) {
-		border-bottom: 1px lightskyblue solid;
+		border-bottom: 1px whitesmoke solid;
 		padding-bottom: 20px;
 	}
 }
@@ -369,7 +380,9 @@ body{
     line-height: 28px;
     text-align: center;
   }
-
+.clients-carousel img {
+    padding: 0 5px;
+}
 
 .communicate{
     text-align: center;
@@ -500,6 +513,9 @@ body{
     padding: 0;
 }
 
+.team .row .card .info{
+    margin-top: 10px;
+}
 .team .row .card .info h3{
     font-size: 2rem;
     color: #333;
@@ -510,35 +526,52 @@ body{
     color: #00bfff;
 }
 
-.team .row .card .info .icons a{
-    margin-top: 4rem;
-    padding-top: 0 1rem;
-    font-size: 2rem;
+.team .row .card .info .degree {
+    font-size: 1.6rem;
+    /*color: #00bfff;*/
+    margin-bottom: 0;
+}
+.team .row .card .info h3 a{
     color: #333;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+    text-decoration: underline;
 }
-
-.team .row .card .info .icons .fa-facebook-f:hover, .footer .icons .fa-facebook-f:hover{
-    color: #4267B2;
-    text-decoration: none;
-}
-
-.team .row .card .info .icons .fa-twitter:hover, .footer .icons .fa-twitter:hover{
-    color: #1DA1F2;
-    text-decoration: none;
-}
-
-.team .row .card .info .icons .fa-instagram:hover, .footer .icons .fa-instagram:hover{
-    color: #C13584;
-    text-decoration: none;
-}
-
-.team .row .card .info .icons .fa-linkedin:hover, .footer .icons .fa-linkedin:hover{
+.team .row .card .info h3 a i{
     color: #2867B2;
-    text-decoration: none;
 }
+
+.team .row .card .info h3 a:hover{
+    color: #00bfff;
+    text-decoration: underline;
+}
+/*.team .row .card .info .icons a{*/
+/*    margin-top: 4rem;*/
+/*    padding-top: 0 1rem;*/
+/*    font-size: 2rem;*/
+/*    color: #333;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    padding: 1rem;*/
+/*}*/
+
+/*.team .row .card .info .icons .fa-facebook-f:hover, .footer .icons .fa-facebook-f:hover{*/
+/*    color: #4267B2;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.team .row .card .info .icons .fa-twitter:hover, .footer .icons .fa-twitter:hover{*/
+/*    color: #1DA1F2;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.team .row .card .info .icons .fa-instagram:hover, .footer .icons .fa-instagram:hover{*/
+/*    color: #C13584;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.team .row .card .info .icons .fa-linkedin:hover, .footer .icons .fa-linkedin:hover{*/
+/*    color: #2867B2;*/
+/*    text-decoration: none;*/
+/*}*/
 
 .team .row .card::before, .team .row .card::after{
     content: '';
@@ -938,7 +971,8 @@ body{
 
     .header .logo img{
         width: 20%;
-        height: 3rem;
+        height: auto;
+        object-fit: cover;
         top: 0;
         left: 0;
         background-size: cover;
