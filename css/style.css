@@ -165,7 +165,7 @@ body{
 
 .home h1{
     color: #fff;
-    font-size: 5.5rem;
+    font-size: 4rem;
 }
 
 .home h2{
@@ -173,12 +173,12 @@ body{
     font-size: 3rem;
 }
 
-.home h2 img{
-    width: 17rem;
+.home img{
+    width: clamp(200px, 28vw, 360px);
     height: auto;
-    max-width: 100%;
-    vertical-align: middle;
-    display: inline-block;
+    max-width: 90%;
+    margin-top: 3rem;
+    display: block;
 }
 
 .home .wave{
@@ -260,7 +260,13 @@ body{
     text-align: center;
     margin-top: -8rem;
   }
-
+.pt-5 .container .row .section-head h1 img{
+    width: 17rem;
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+    display: inline-block;
+}
 
 .item{
     background:#fff;
@@ -878,10 +884,6 @@ body{
         }
         
         @media (min-width: 768px) {
-            .footer .credit {
-                text-align: right;
-            }
-            
             .footer .copyright {
                 text-align: left;
             }
@@ -900,7 +902,7 @@ body{
             right: 15px;
             bottom: 15px;
             transition: background 0.3s;
-            z-index: 9;
+            z-index: 999;
         }
         
         .back-to-top i {
