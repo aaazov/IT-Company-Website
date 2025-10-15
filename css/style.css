@@ -112,10 +112,12 @@ body{
 }
 
 .header .logo img{
-    width: 130%;
-    height: 3rem;
-    top: 0;
-    left: 0;
+    width: auto;
+    height: clamp(2.5rem, 2vw + 2rem, 3.5rem);
+    object-fit: contain;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: block;
 }
 
 .header .navbar ul{
@@ -139,10 +141,6 @@ body{
     text-decoration: underline;
 }
 
-.header .logo i{
-    padding: 0.5rem;
-}
-
 .header .fa-bars{
     color: #fff;
     cursor: pointer;
@@ -152,7 +150,7 @@ body{
 
 .home{
     min-height: 100vh;
-    width: 100vw;
+    width: 100%;
     background-image: url(../images/main-background-3.PNG);
     background-size: cover;
     display: flex;
@@ -217,7 +215,7 @@ body{
 
 .vision{
     min-height: 40vh;
-    width: 100vw;
+    width: 100%;
     top: -3rem;
     text-align: center;
     position: relative;
@@ -701,8 +699,9 @@ body{
             height: 3.5rem;
             width: 15rem;
             box-shadow: 0 .2rem .5rem rgba(0,0,0,.3);
+            color:#002e5f
 		}
-        .contact-form-btn:hover{
+.contact-form-btn:hover{
             letter-spacing: .1rem;
             opacity: .9;
             color: white;
@@ -914,7 +913,7 @@ body{
 
         .faq{
             min-height: 70vh;
-            width: 100vw;
+            width: 100%;
             text-align: center;
             padding: 0 2rem;
             background: url(../images/faq.jpg);
@@ -990,14 +989,12 @@ body{
         font-size: 50%;
     }
 
-    .header .logo img{
-        width: 20%;
-        height: auto;
-        object-fit: cover;
-        top: 0;
-        left: 0;
-        background-size: cover;
-    }
+    /*.header .logo img{*/
+    /*    height: 2.5rem;*/
+    /*    object-fit: contain;*/
+    /*    flex-shrink: 0;*/
+    /*    display: block;*/
+    /*}*/
 
     .header .fa-bars{
         display: block;
@@ -1047,7 +1044,7 @@ body{
         color: #fff;
         font-size: 4rem;
     }
-    
+
     .home h2{
         color: #fff;
         font-size: 2rem;
@@ -1055,7 +1052,7 @@ body{
 
     .about{
         min-height: 38vh;
-        width: 100vw;
+        width: 100%;
         margin-top: -3rem;
         margin-bottom: -2rem;
         top: -2rem;
@@ -1064,7 +1061,7 @@ body{
         overflow: hidden;
         line-height: 6rem;
     }
-    
+
     .about .row{
         line-height: 2rem;
         display: flex;
@@ -1072,21 +1069,21 @@ body{
         justify-content: space-around;
         padding: 0 4rem;
     }
-    
+
     .about .row .content{
         text-align: center;
     }
-    
+
     .about .row .content h3{
         font-size: 2rem;
         color: var(--color);
     }
-    
+
     .about .row .content p{
         font-size: 1.3rem;
         color: #333;
         padding: 1rem 0;
-    } 
+    }
 
     .clients {
         position: relative;
@@ -1115,7 +1112,7 @@ body{
         text-align: center;
         align-items: center;
     }
-    
+
     .contact .heading{
         margin-bottom: 3rem;
         margin-top: -2rem;
@@ -1218,6 +1215,7 @@ body{
             height: 3.5rem;
             width: 12rem;
             box-shadow: 0 .2rem .5rem rgba(0,0,0,.3);
+            color: #002e5f
 		}
         .contact-form-btn:hover{
             letter-spacing: .1rem;
@@ -1253,12 +1251,12 @@ body{
             padding: 0;
             min-height: 60vh;
         }
-    
+
         .faq .row{
             padding: 0 1.5rem;
             flex-flow: column;
         }
-    
+
         .faq .row .accordion-container{
             width: 100%;
         }
