@@ -730,28 +730,6 @@ body{
 			color: #aaa;
             font-size: 1.5rem;
 		}
-
-.toast-wrapper {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1080;
-}
-
-.toast-scale-125 .toast {
-    transform: scale(1.25);
-    transform-origin:center;
-}
-
-.toast-header.bg-success {
-    background-color: #28a745 !important;
-    color: #fff !important;
-}
-.toast-header.bg-danger {
-    background-color: #dc3545 !important;
-    color: #fff !important;
-}
-
         .footer {
             position: relative;
             padding: 0 0 30px 0;
@@ -809,7 +787,7 @@ body{
             width: 50px;
             border-bottom: 2px solid #ffffff;
         }
-        
+
         .footer .footer-top .footer-links ul {
             list-style: none;
             padding: 0;
