@@ -82,26 +82,6 @@ $(document).ready(function () {
     });
 });
 
-function showToast(type, message) {
-    const toastEl = document.getElementById('global-toast');
-    const titleEl = document.getElementById('toast-title');
-    const bodyEl = document.getElementById('toast-body');
-
-    const isSuccess = type === 'success';
-    titleEl.textContent = isSuccess ? 'Success' : 'Notice';
-    bodyEl.textContent = message;
-
-    const header = toastEl.querySelector('.toast-header');
-    header.classList.remove('bg-success', 'bg-danger', 'text-white');
-    if (isSuccess) {
-        header.classList.add('bg-success', 'text-white');
-    } else {
-        header.classList.add('bg-danger', 'text-white');
-    }
-
-    $(toastEl).toast('show');
-}
-
 function submitForm(e) {
     e.preventDefault();
 
@@ -111,6 +91,7 @@ function submitForm(e) {
         return;
     }
     const submitBtn = document.querySelector('.contact-form-btn');
+    const responseMessage = document.getElementById('response-message');
 
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Sending...';
@@ -136,18 +117,35 @@ function submitForm(e) {
         .then((response) => response.json())
         .then((data) => {
             if (data.status === 'success') {
-               showToast('success', 'Thank you! Your Message sent successfully!');
+                responseMessage.textContent =
+                    'Thank you! Your message has been sent.';
                 console.log('success');
                 document.getElementById('contact-form').reset();
+
+                setTimeout(() => {
+                    responseMessage.textContent = '';
+                }, 5000);
             } else {
-                showToast('error','Submission Failed:  ' + (data.error || 'Please try again.'));
+                responseMessage.textContent =
+                    'Submission Failed:  ' +
+                    (data.error || 'Please try again.');
                 console.log('response fail');
                 console.log('Response JSON:', data);
+
+                // 5秒后清空提示
+                setTimeout(() => {
+                    responseMessage.textContent = '';
+                }, 5000);
             }
         })
         .catch((error) => {
-            showToast('error', 'Error submitting the form. Please try again.');
+            responseMessage.textContent =
+                'Error submitting the form. Please try again.';
             console.log('catch block error:  ' + error);
+
+            setTimeout(() => {
+                responseMessage.textContent = '';
+            }, 5000);
         })
         .finally(() => {
             submitBtn.textContent = originalText;
