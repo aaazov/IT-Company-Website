@@ -535,18 +535,11 @@ body{
     /*color: #00bfff;*/
     margin-bottom: 0;
 }
-.team .row .card .info h3 a{
-    color: #333;
-    text-decoration: underline;
-}
-.team .row .card .info h3 a i{
-    color: #2867B2;
+.team .row .card .info .intro {
+    font-size: 1.1rem;
+    margin: 0 3rem 0 3rem;
 }
 
-.team .row .card .info h3 a:hover{
-    color: #00bfff;
-    text-decoration: underline;
-}
 /*.team .row .card .info .icons a{*/
 /*    margin-top: 4rem;*/
 /*    padding-top: 0 1rem;*/
@@ -751,8 +744,7 @@ body{
         .footer .footer-top .social-links a {
             font-size: 18px;
             display: inline-block;
-            background: #ffffff;
-            color: #00bfff;
+            color: #ffffff;
             line-height: 1;
             padding: 9px 0;
             margin-right: 4px;
@@ -763,8 +755,7 @@ body{
         }
         
         .footer .footer-top .social-links a:hover {
-            background: #00bfff;
-            color: #ffffff;
+            transform: scale(1.5);
         }
         
         .footer .footer-top h4 {
