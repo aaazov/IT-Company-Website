@@ -882,14 +882,212 @@ body{
             color: black;
         }
 
+        .contact-popover {
+            position: fixed;
+            right: 15px;
+            bottom: var(--contact-popover-bottom, 15px);
+            z-index: 998;
+            display: flex;
+            flex-direction: column;
+            width: 360px;
+            max-width: calc(100vw - 30px);
+            max-height: calc(100vh - var(--contact-popover-bottom, 15px) - 15px);
+            max-height: calc(100dvh - var(--contact-popover-bottom, 15px) - 15px);
+            overflow: hidden;
+            border: 1px solid #d6e2ed;
+            border-radius: 16px;
+            background: #fff;
+            color: #002e5f;
+            box-shadow: 0 10px 35px rgba(0, 25, 55, .22);
+            animation: contact-popover-in 220ms ease-out;
+        }
+
+        .contact-popover,
+        .contact-popover * {
+            transition: none;
+        }
+
+        .contact-popover[hidden],
+        .contact-popover [hidden] {
+            display: none !important;
+        }
+
+        .contact-popover-header {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #002e5f;
+            color: #fff;
+        }
+
+        .contact-popover-header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .contact-popover-close {
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+            color: #fff;
+            font-size: 30px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .contact-popover-close:hover {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        .contact-popover-body {
+            min-height: 0;
+            padding: 16px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .contact-popover .contact-form form {
+            display: grid;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .contact-popover label {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .contact-popover .contact-form input,
+        .contact-popover .contact-form textarea {
+            box-sizing: border-box;
+            width: 100%;
+            height: 42px;
+            min-height: 42px;
+            margin: 0 0 4px;
+            padding: 10px 12px;
+            border: 1px solid #b9c9d8;
+            border-radius: 8px;
+            color: #223548;
+            background: #fff;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .contact-popover .contact-form textarea {
+            height: 76px;
+            resize: vertical;
+        }
+
+        .contact-popover .contact-form input::placeholder,
+        .contact-popover .contact-form textarea::placeholder {
+            color: #6b7785;
+            font-size: 14px;
+        }
+
+        .contact-popover .contact-form-btn {
+            width: 100%;
+            height: 44px;
+            margin: 4px 0 0;
+            padding: 8px 16px;
+            border: 1px solid #002e5f;
+            border-radius: 8px;
+            box-shadow: none;
+            background: #002e5f;
+            color: #fff;
+            font-size: 15px;
+            letter-spacing: normal;
+            cursor: pointer;
+        }
+
+        .contact-popover .contact-form-btn:hover {
+            background: #00447d;
+            letter-spacing: normal;
+        }
+
+        .contact-popover .contact-form-btn:disabled {
+            opacity: .65;
+            cursor: wait;
+        }
+
+        .contact-popover :focus-visible {
+            outline: 2px solid #00bfff;
+            outline-offset: 2px;
+        }
+
+        .contact-popover-response {
+            margin: 12px 0 0;
+            color: #002e5f;
+            font-size: 14px;
+        }
+
+        .contact-popover-response:empty {
+            display: none;
+        }
+
+        .contact-popover-actions {
+            display: flex;
+            flex: 0 0 auto;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 4px 8px;
+            padding: 8px 12px;
+            border-top: 1px solid #e2eaf1;
+            background: #f5f8fb;
+        }
+
+        .contact-popover-actions button {
+            min-height: 44px;
+            padding: 8px 4px;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: #365774;
+            font-size: 13px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        @keyframes contact-popover-in {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .contact-popover {
+                width: calc(100vw - 30px);
+                max-height: min(50vh, calc(100vh - var(--contact-popover-bottom, 15px) - 15px));
+                max-height: min(50dvh, calc(100dvh - var(--contact-popover-bottom, 15px) - 15px));
+                animation-name: contact-popover-mobile-in;
+            }
+        }
+
+        @keyframes contact-popover-mobile-in {
+            from { opacity: 0; transform: translateY(calc(100% + var(--contact-popover-bottom, 15px))); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .contact-popover { animation: none; }
+        }
+
         .faq{
             min-height: 70vh;
             width: 100%;
             text-align: center;
-            padding: 0 2rem;
-            background: url(../images/faq.jpg);
+            padding: 0 2rem 5rem;
+            background-color: #262626;
+            background-image: url(../images/faq.jpg);
             background-repeat: no-repeat;
-            background-size: cover;
+            background-position: center top;
+            background-size: 100% 100%;
         }
         
         .faq .row{
@@ -945,6 +1143,7 @@ body{
             background-color: #fff;
             font-size: 1.3rem;
             display: none;
+            transition: none;
             margin-left: 1rem;
             margin-right: 2rem;
         }
@@ -1219,7 +1418,7 @@ body{
         }
 
         .faq{
-            padding: 0;
+            padding: 0 0 4rem;
             min-height: 60vh;
         }
 
