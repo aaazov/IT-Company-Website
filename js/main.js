@@ -131,9 +131,6 @@ function submitForm(e) {
                     'Thank you! Your message has been sent.';
                 console.log('success');
                 form.reset();
-                document.dispatchEvent(new CustomEvent('contact:submitted', {
-                    detail: { form },
-                }));
 
                 setTimeout(() => {
                     if (!form.hidden) responseMessage.textContent = '';

@@ -2,176 +2,138 @@
     'use strict';
 
     const popup = document.querySelector('.contact-popover');
-    const sourceForm = document.getElementById('contact-form');
-    const contactSection = document.querySelector('.contact-in');
-    const topButton = document.querySelector('.back-to-top');
-    if (!popup || !sourceForm || !contactSection) return;
+    const product = document.getElementById('product');
+    const invitation = document.querySelector('.communicate');
+    if (!popup || !product || !invitation) return;
 
-    const storageKey = 'aikangaroo.contact-popover.disabled';
-    const initialDelay = 10 * 1000;
-    const laterDelay = 30 * 60 * 1000;
-    let permanentlyDisabled = false;
-    let contactSeen = false;
-    let readyToShow = false;
-    let promptTimer;
+    const topButton = document.querySelector('.back-to-top');
+    const navbar = document.querySelector('.header .navbar');
+    const header = document.querySelector('.header');
+    const mobile = window.matchMedia('(max-width: 600px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let dismissed = false;
+    let requestedVisible = false;
+    let hideTimer;
+    let productReached = false;
     let framePending = false;
     let previousFocus;
 
-    function readDisabled() {
-        try {
-            return Boolean(localStorage.getItem(storageKey));
-        } catch (error) {
-            return permanentlyDisabled;
-        }
-    }
+    // Dismissal lasts only until this page is reloaded.
 
-    function hide() {
-        const restoreFocus = popup.contains(document.activeElement);
+    function finishHide() {
+        if (requestedVisible) return;
+        clearTimeout(hideTimer);
         popup.hidden = true;
-        readyToShow = false;
-        clearTimeout(promptTimer);
-        if (restoreFocus && previousFocus && previousFocus.isConnected) {
-            previousFocus.focus({ preventScroll: true });
+        document.body.classList.remove('survey-invite-visible');
+    }
+
+    function setVisible(visible) {
+        if (visible === requestedVisible) return;
+        requestedVisible = visible;
+        clearTimeout(hideTimer);
+        if (visible) {
+            if (popup.hidden) {
+                previousFocus = document.activeElement;
+                popup.hidden = false;
+                // Commit the starting style before transitioning into view.
+                popup.getBoundingClientRect();
+            }
+            popup.inert = false;
+            popup.removeAttribute('aria-hidden');
+            document.body.classList.add('survey-invite-visible');
+            popup.classList.add('is-visible');
+        } else {
+            if (popup.contains(document.activeElement) && previousFocus && previousFocus.isConnected) {
+                previousFocus.focus({ preventScroll: true });
+            }
+            popup.inert = true;
+            popup.setAttribute('aria-hidden', 'true');
+            popup.classList.remove('is-visible');
+            if (reducedMotion.matches) finishHide();
+            else hideTimer = setTimeout(finishHide, 220);
         }
     }
 
-    function disableForever(reason) {
-        permanentlyDisabled = true;
-        try {
-            localStorage.setItem(storageKey, reason);
-        } catch (error) {
-            // Keep the preference in memory when browser storage is unavailable.
-        }
-        hide();
-    }
-
-    // Reuse the existing fields and validation without duplicating their IDs.
-    const popupForm = sourceForm.cloneNode(true);
-    popupForm.id = 'contact-popover-form';
-    popupForm.removeAttribute('onsubmit');
-    popupForm.addEventListener('submit', submitForm);
-    const labels = {
-        name: 'Name',
-        phone: 'Phone number',
-        email: 'Email (optional)',
-        message: 'Your message',
-    };
-    const autocomplete = { name: 'name', phone: 'tel', email: 'email' };
-    popupForm.querySelectorAll('input, textarea').forEach(function (field) {
-        field.id = 'contact-popover-' + field.name;
-        if (autocomplete[field.name]) field.autocomplete = autocomplete[field.name];
-        const label = document.createElement('label');
-        label.htmlFor = field.id;
-        label.textContent = labels[field.name] || field.name;
-        field.before(label);
+    popup.addEventListener('transitionend', function (event) {
+        if (event.target === popup && event.propertyName === 'opacity') finishHide();
     });
-    popup.querySelector('.contact-form').prepend(popupForm);
-    popup.querySelector('h2').textContent = document.querySelector('.contact .heading').textContent;
 
-    function updatePosition() {
-        let bottom = 15;
-        if (topButton && getComputedStyle(topButton).display !== 'none') {
-            bottom = window.innerHeight - topButton.getBoundingClientRect().top + 12;
+    function dismiss() {
+        dismissed = true;
+        setVisible(false);
+    }
+
+    function update() {
+        framePending = false;
+        const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        const viewportBottom = window.visualViewport ? window.visualViewport.offsetTop + viewportHeight : viewportHeight;
+        const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+        const productRect = product.getBoundingClientRect();
+
+        // Also handles anchor navigation and a restored scroll position past Product.
+        if (window.scrollY > 0 && productRect.top < viewportBottom * .85) productReached = true;
+
+        const invitationRect = invitation.getBoundingClientRect();
+        const invitationVisible = invitationRect.top < viewportBottom && invitationRect.bottom > headerBottom;
+        const menuOpen = navbar && navbar.classList.contains('nav-toggle');
+        const keyboardOpen = mobile.matches && window.visualViewport && viewportHeight < window.innerHeight * .75;
+        const visible = productReached && !dismissed && !invitationVisible && !menuOpen && !keyboardOpen && !document.hidden;
+
+        let bottom = 16;
+        if (mobile.matches) {
+            const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+            const viewportLeft = window.visualViewport ? window.visualViewport.offsetLeft : 0;
+            const bottomInset = Math.max(0, window.innerHeight - viewportBottom);
+            bottom = 12 + bottomInset;
+            document.body.style.setProperty('--survey-viewport-width', viewportWidth + 'px');
+            document.body.style.setProperty('--survey-viewport-right', Math.max(0, window.innerWidth - viewportLeft - viewportWidth) + 'px');
+            document.body.style.setProperty('--survey-viewport-bottom', bottomInset + 'px');
+        } else if (topButton && getComputedStyle(topButton).display !== 'none') {
+            bottom = Math.max(bottom, window.innerHeight - topButton.getBoundingClientRect().top + 12);
         }
         popup.style.setProperty('--contact-popover-bottom', bottom + 'px');
-    }
-
-    function checkContactVisibility() {
-        if (contactSeen) return;
-        const rect = contactSection.getBoundingClientRect();
-        const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
-        if (rect.height > 0 && visibleHeight >= rect.height / 6 &&
-            rect.right > 0 && rect.left < window.innerWidth) {
-            contactSeen = true;
-            hide();
+        setVisible(visible);
+        if (visible && mobile.matches) {
+            // Leave space to scroll the final page content clear of the compact dock.
+            document.body.style.setProperty('--survey-dock-height', Math.ceil(popup.getBoundingClientRect().height + 24) + 'px');
         }
     }
 
-    function maybeShow() {
-        checkContactVisibility();
-        if (!readyToShow || document.hidden || contactSeen || permanentlyDisabled || readDisabled()) return;
-        readyToShow = false;
-        updatePosition();
-        previousFocus = document.activeElement;
-        popup.hidden = false;
-    }
-
-    function schedule(delay) {
-        clearTimeout(promptTimer);
-        promptTimer = setTimeout(function () {
-            readyToShow = true;
-            maybeShow();
-        }, delay);
-    }
-
-    function onViewportChange() {
+    function scheduleUpdate() {
         if (framePending) return;
         framePending = true;
-        requestAnimationFrame(function () {
-            framePending = false;
-            updatePosition();
-            checkContactVisibility();
-        });
+        requestAnimationFrame(update);
     }
 
-    popup.querySelector('.contact-popover-close').addEventListener('click', hide);
-    popup.querySelector('[data-contact-action="later"]').addEventListener('click', function () {
-        hide();
-        schedule(laterDelay);
+    popup.querySelector('.contact-popover-close').addEventListener('click', function () {
+        dismiss();
     });
-    popup.querySelector('[data-contact-action="never"]').addEventListener('click', function () {
-        disableForever('opt-out');
+    const feedbackLink = popup.querySelector('.contact-popover-feedback');
+    feedbackLink.addEventListener('click', function () {
+        dismiss();
+    });
+    feedbackLink.addEventListener('auxclick', function (event) {
+        if (event.button === 1) dismiss();
     });
     document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && !popup.hidden) hide();
+        if (event.key === 'Escape' && requestedVisible) dismiss();
     });
 
-    const demoLink = Array.from(document.querySelectorAll('.navbar a')).find(function (link) {
-        return /demo request/i.test(link.textContent);
-    });
-    function onDemoClick(event) {
-        const link = event.target.closest('a');
-        if (demoLink && link && link.href === demoLink.href && (event.button === 0 || event.button === 1)) {
-            disableForever('demo-request');
-        }
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate, { once: true });
+    window.addEventListener('pageshow', scheduleUpdate);
+    document.addEventListener('visibilitychange', scheduleUpdate);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', scheduleUpdate);
+        window.visualViewport.addEventListener('scroll', scheduleUpdate);
     }
-    document.addEventListener('click', onDemoClick);
-    document.addEventListener('auxclick', onDemoClick);
-    document.addEventListener('contact:submitted', function (event) {
-        const submittedHere = event.detail.form === popupForm && !popup.hidden;
-        disableForever('submitted');
-        if (submittedHere) {
-            // Keep the confirmation visible until the visitor closes it.
-            popupForm.hidden = true;
-            popup.querySelector('.contact-popover-actions').hidden = true;
-            popup.hidden = false;
-        }
-    });
-    window.addEventListener('storage', function (event) {
-        if (event.key === storageKey && event.newValue) disableForever(event.newValue);
-    });
-    window.addEventListener('scroll', onViewportChange, { passive: true });
-    window.addEventListener('resize', onViewportChange);
-    if (topButton) {
-        // fadeOut sets display:none after scrolling has stopped.
-        new MutationObserver(onViewportChange).observe(topButton, {
-            attributes: true,
-            attributeFilter: ['style'],
-        });
+    if (navbar) new MutationObserver(scheduleUpdate).observe(navbar, { attributes: true, attributeFilter: ['class'] });
+    if (topButton) new MutationObserver(scheduleUpdate).observe(topButton, { attributes: true, attributeFilter: ['style'] });
+    if (window.ResizeObserver) {
+        const observer = new ResizeObserver(scheduleUpdate);
+        observer.observe(product);
+        observer.observe(invitation);
     }
-    document.addEventListener('visibilitychange', maybeShow);
-    window.addEventListener('pagehide', hide);
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            contactSeen = false;
-            start();
-        }
-    });
-
-    function start() {
-        checkContactVisibility();
-        if (!contactSeen && !readDisabled()) schedule(initialDelay);
-    }
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start, { once: true });
+    scheduleUpdate();
 })();
