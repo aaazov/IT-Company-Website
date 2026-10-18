@@ -2,19 +2,18 @@
     'use strict';
 
     const popup = document.querySelector('.contact-popover');
-    const product = document.getElementById('product');
     const invitation = document.querySelector('.communicate');
-    if (!popup || !product || !invitation) return;
+    const header = document.querySelector('.header');
+    if (!popup || !invitation || !header) return;
 
     const topButton = document.querySelector('.back-to-top');
     const navbar = document.querySelector('.header .navbar');
-    const header = document.querySelector('.header');
+    const headerScrollThreshold = Number(header.dataset.scrollThreshold);
     const mobile = window.matchMedia('(max-width: 600px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let dismissed = false;
     let requestedVisible = false;
     let hideTimer;
-    let productReached = false;
     let framePending = false;
     let previousFocus;
 
@@ -68,16 +67,11 @@
         const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
         const viewportBottom = window.visualViewport ? window.visualViewport.offsetTop + viewportHeight : viewportHeight;
         const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
-        const productRect = product.getBoundingClientRect();
-
-        // Also handles anchor navigation and a restored scroll position past Product.
-        if (window.scrollY > 0 && productRect.top < viewportBottom * .85) productReached = true;
-
         const invitationRect = invitation.getBoundingClientRect();
         const invitationVisible = invitationRect.top < viewportBottom && invitationRect.bottom > headerBottom;
         const menuOpen = navbar && navbar.classList.contains('nav-toggle');
         const keyboardOpen = mobile.matches && window.visualViewport && viewportHeight < window.innerHeight * .75;
-        const visible = productReached && !dismissed && !invitationVisible && !menuOpen && !keyboardOpen && !document.hidden;
+        const visible = window.scrollY > headerScrollThreshold && !dismissed && !invitationVisible && !menuOpen && !keyboardOpen && !document.hidden;
 
         let bottom = 16;
         if (mobile.matches) {
@@ -132,7 +126,6 @@
     if (topButton) new MutationObserver(scheduleUpdate).observe(topButton, { attributes: true, attributeFilter: ['style'] });
     if (window.ResizeObserver) {
         const observer = new ResizeObserver(scheduleUpdate);
-        observer.observe(product);
         observer.observe(invitation);
     }
     scheduleUpdate();

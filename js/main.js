@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    const headerScrollThreshold = Number(document.querySelector('.header').dataset.scrollThreshold);
+
     $('.fa-bars').click(function () {
         $(this).toggleClass('fa-times');
         $('.navbar').toggleClass('nav-toggle');
@@ -8,7 +10,7 @@ $(document).ready(function () {
         $('.fa-bars').removeClass('fa-times');
         $('.navbar').removeClass('nav-toggle');
 
-        if ($(window).scrollTop() > 35) {
+        if ($(window).scrollTop() > headerScrollThreshold) {
             $('.header').css({
                 background: '#002e5f',
                 'box-shadow': '0 .2rem .5rem rgba(0,0,0,.4)',
