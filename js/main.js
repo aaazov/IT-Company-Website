@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    const headerScrollThreshold = Number(document.querySelector('.header').dataset.scrollThreshold);
+
     $('.fa-bars').click(function () {
         $(this).toggleClass('fa-times');
         $('.navbar').toggleClass('nav-toggle');
@@ -8,7 +10,7 @@ $(document).ready(function () {
         $('.fa-bars').removeClass('fa-times');
         $('.navbar').removeClass('nav-toggle');
 
-        if ($(window).scrollTop() > 35) {
+        if ($(window).scrollTop() > headerScrollThreshold) {
             $('.header').css({
                 background: '#002e5f',
                 'box-shadow': '0 .2rem .5rem rgba(0,0,0,.4)',
@@ -75,10 +77,19 @@ $(document).ready(function () {
     });
 
     $('.accordion-header').click(function () {
-        $('.accordion .accordion-body').slideUp(500);
-        $(this).next('.accordion-body').slideDown(500);
-        $('.accordion .accordion-header span').text('+');
-        $(this).children('span').text('-');
+        const $header = $(this);
+        const $body = $header.next('.accordion-body');
+        const opening = !$header.hasClass('is-open');
+
+        $header.toggleClass('is-open', opening);
+        $header.children('span').text(opening ? '-' : '+');
+
+        $body.stop(true, false);
+        if (opening) {
+            $body.slideDown(250, 'linear');
+        } else {
+            $body.slideUp(250, 'linear');
+        }
     });
 });
 
@@ -90,21 +101,22 @@ function submitForm(e) {
         form.reportValidity();
         return;
     }
-    const submitBtn = document.querySelector('.contact-form-btn');
-    const responseMessage = document.getElementById('response-message');
+    const submitBtn = form.querySelector('.contact-form-btn');
+    const responseMessage = form.parentElement.querySelector('[role="status"]');
+
+    if (submitBtn.disabled) return;
 
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
     const formData = {
-        name: document.querySelector('[name="name"]').value,
-        phone: document.querySelector('[name="phone"]').value,
-        email: document.querySelector('[name="email"]').value,
-        message: document.querySelector('[name="message"]').value,
+        name: form.elements.namedItem('name').value,
+        phone: form.elements.namedItem('phone').value,
+        email: form.elements.namedItem('email').value,
+        message: form.elements.namedItem('message').value,
     };
 
-    const devURL = CONFIG.DEV_URL;
     const execUrl = CONFIG.EXEC_URL;
 
     fetch(
@@ -120,10 +132,10 @@ function submitForm(e) {
                 responseMessage.textContent =
                     'Thank you! Your message has been sent.';
                 console.log('success');
-                document.getElementById('contact-form').reset();
+                form.reset();
 
                 setTimeout(() => {
-                    responseMessage.textContent = '';
+                    if (!form.hidden) responseMessage.textContent = '';
                 }, 5000);
             } else {
                 responseMessage.textContent =
