@@ -3,3 +3,13 @@
 
 /.agents/skills/
 /.taste-skill/
+
+node_modules/
+.nuxt/
+.output/
+.tools/
+.env
+.env.*
+!.env.example
+test-results/
+npm-debug.log*

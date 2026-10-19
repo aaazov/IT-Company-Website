@@ -1,0 +1,14 @@
+/* Framework adapters only. Original design remains in style.css. */
+.scenario-carousel { display: block; touch-action: pan-y; --scenario-items: 2; }
+.scenario-carousel .scenario-track { display: flex; transform: translateX(calc(var(--slide-position) * -100% / var(--scenario-items))); transition: transform 250ms ease; }
+.scenario-carousel .owl-item { flex: 0 0 calc(100% / var(--scenario-items)); float: none; transition: none; }
+@media (min-width: 768px) { .scenario-carousel { --scenario-items: 4; } }
+@media (min-width: 900px) { .scenario-carousel { --scenario-items: 6; } }
+.scenario-carousel img { width: 100%; }
+.scenario-carousel .owl-dots { height: 0; line-height: 0; }
+.scenario-carousel button.owl-dot { padding: 0; border: 0; background: none; width: 0; height: 0; overflow: hidden; font-size: 0; }
+.scenario-carousel button.owl-dot:focus-visible { position: absolute; bottom: 0; width: 24px; height: 24px; background: #09b4f5; outline: 2px solid #062c58; }
+.faq-enter-active, .faq-leave-active { transition: height 250ms linear !important; overflow: hidden; }
+.faq .row .accordion-container .accordion .accordion-body { display: block; }
+.faq .accordion-header:focus-visible, .header [role="button"]:focus-visible { outline: 2px solid #09b4f5; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .scenario-carousel .scenario-track, .faq-enter-active, .faq-leave-active { transition-duration: 0ms !important; } }
